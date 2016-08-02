@@ -442,8 +442,6 @@ func swaggerSchemaForType(typeName string, prop swaggerTypable) error {
 		prop.Typed("integer", "uint8")
 	case "uintptr":
 		prop.Typed("integer", "uint64")
-	default:
-		return fmt.Errorf("unknown builtin %q", typeName)
 	}
 	return nil
 }
