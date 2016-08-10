@@ -17,6 +17,7 @@ package scan
 import (
 	"fmt"
 	"go/ast"
+	"log"
 	"reflect"
 	"regexp"
 	"runtime"
@@ -754,8 +755,14 @@ func (scp *schemaParser) createParser(nm string, schema, ps *spec.Schema, fld *a
 }
 
 func (scp *schemaParser) packageForFile(gofile *ast.File) (*loader.PackageInfo, error) {
+	if Debug {
+		log.Printf("packageForFile: looking up packageForFile for %s\n", gofile.Name.Name)
+	}
 	for pkg, pkgInfo := range scp.program.AllPackages {
 		if pkg.Name() == gofile.Name.Name {
+			if Debug {
+				log.Printf("packageForFile: resolved %s\n", pkgInfo.String())
+			}
 			return pkgInfo, nil
 		}
 	}
@@ -828,6 +835,9 @@ func (scp *schemaParser) parseIdentProperty(pkg *loader.PackageInfo, expr *ast.I
 	// find the file this selector points to
 	file, gd, ts, err := findSourceFile(pkg, expr.Name)
 	if err != nil {
+		if Debug {
+			log.Printf("parseIdentProperty: error in findSourceFile: %v\n", err)
+		}
 		err := swaggerSchemaForType(expr.Name, prop)
 		if err != nil {
 			return fmt.Errorf("package %s, error is: %v", pkg.String(), err)
@@ -910,6 +920,9 @@ func (scp *schemaParser) schemaForSelector(gofile *ast.File, expr *ast.SelectorE
 
 	_, gd, _, err := findSourceFile(pkg, expr.Sel.Name)
 	if err != nil {
+		if Debug {
+			log.Printf("schemaForSelector: error in findSourceFile: %v\n", err)
+		}
 		err := swaggerSchemaForType(expr.Sel.Name, prop)
 		if err != nil {
 			return fmt.Errorf("package %s, error is: %v", pkg.String(), err)
