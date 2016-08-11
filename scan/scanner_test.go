@@ -88,6 +88,8 @@ func TestAppScanner_Definitions(t *testing.T) {
 		assert.True(t, ok, "Should include package structs with swagger:model")
 		_, ok = doc.Definitions["DateRange"]
 		assert.True(t, ok, "Should include package structs that are used in responses")
+		_, ok = doc.Definitions["ErrorResponse"]
+		assert.True(t, ok, "Should include responses referenced as body:ModelName")
 		_, ok = doc.Definitions["BookingResponse"]
 		assert.False(t, ok, "Should not include responses")
 		_, ok = doc.Definitions["IgnoreMe"]

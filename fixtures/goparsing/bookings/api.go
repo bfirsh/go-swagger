@@ -58,6 +58,14 @@ type BookingResponse struct {
 	}
 }
 
+// ErrorResponse represents an error
+//
+// swagger:model
+type ErrorResponse struct {
+	// The error message
+	Message string `json:"message"`
+}
+
 // Bookings swagger:route GET /admin/bookings/ booking Bookings
 //
 // Bookings lists all the appointments that have been made on the site.
@@ -73,6 +81,7 @@ type BookingResponse struct {
 //
 // Responses:
 // 200: BookingResponse
+// 500: body:ErrorResponse
 func bookings(w http.ResponseWriter, r *http.Request) {
 
 }
